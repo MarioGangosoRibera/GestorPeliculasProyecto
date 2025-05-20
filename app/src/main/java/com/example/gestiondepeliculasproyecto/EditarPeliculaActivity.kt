@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AgregarPeliculaActivity : AppCompatActivity() {
+class EditarPeliculaActivity : AppCompatActivity() {
 
     private lateinit var editTextTitulo: TextInputEditText
     private lateinit var editTextGenero: TextInputEditText
@@ -23,28 +23,41 @@ class AgregarPeliculaActivity : AppCompatActivity() {
         BaseDeDatosPelicula.obtenerBaseDeDatos(application).peliculaDao()
     }
 
+    private var peliculaId: Int = 0  // ID para identificar la película a editar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_pelicula)
 
-        // Inicializar vistas
         editTextTitulo = findViewById(R.id.edit_text_titulo)
         editTextGenero = findViewById(R.id.edit_text_genero)
         editTextAnio = findViewById(R.id.edit_text_anio)
         botonGuardar = findViewById(R.id.boton_guardar)
 
-        // Configurar el botón para guardar la película
+        // Cambiar texto del botón
+        botonGuardar.text = "Actualizar"
+
+        // Obtener datos que vienen en el Intent (id y campos)
+        peliculaId = intent.getIntExtra("id", 0)
+        val titulo = intent.getStringExtra("titulo") ?: ""
+        val genero = intent.getStringExtra("genero") ?: ""
+        val anio = intent.getIntExtra("anio", 0)
+
+        // Rellenar campos con los datos
+        editTextTitulo.setText(titulo)
+        editTextGenero.setText(genero)
+        editTextAnio.setText(anio.toString())
+
         botonGuardar.setOnClickListener {
-            guardarPelicula()
+            actualizarPelicula()
         }
     }
 
-    private fun guardarPelicula() {
+    private fun actualizarPelicula() {
         val titulo = editTextTitulo.text.toString().trim()
         val genero = editTextGenero.text.toString().trim()
         val anioStr = editTextAnio.text.toString().trim()
 
-        // Validar entradas
         if (titulo.isEmpty() || genero.isEmpty() || anioStr.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
             return
@@ -57,26 +70,18 @@ class AgregarPeliculaActivity : AppCompatActivity() {
             return
         }
 
-        // Crear objeto Pelicula
-        val nuevaPelicula = Pelicula(
+        val peliculaActualizada = Pelicula(
+            id = peliculaId,
             titulo = titulo,
             genero = genero,
             anio = anio
         )
 
-        // Guardar en la base de datos
         CoroutineScope(Dispatchers.IO).launch {
-            peliculaDao.insertar(nuevaPelicula)
+            peliculaDao.actualizar(peliculaActualizada)
 
-            // Volver al hilo principal
             runOnUiThread {
-                Toast.makeText(
-                    this@AgregarPeliculaActivity,
-                    "Película guardada con éxito",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                // Cerrar esta Activity y volver a la principal
+                Toast.makeText(this@EditarPeliculaActivity, "Película actualizada", Toast.LENGTH_SHORT).show()
                 finish()
             }
         }

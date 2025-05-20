@@ -24,6 +24,10 @@
         <activity
             android:name=".AgregarPeliculaActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".EditarPeliculaActivity"
+            android:exported="false" />
     </application>
 
 

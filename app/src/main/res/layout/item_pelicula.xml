@@ -10,33 +10,60 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/text_view_titulo"
-            android:layout_width="match_parent"
+        <!-- Imagen de la película -->
+        <ImageView
+            android:id="@+id/image_view_pelicula"
+            android:layout_width="93dp"
+            android:layout_height="96dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/black"
+            android:scaleType="centerCrop" /> <!-- Usa un placeholder por defecto -->
+
+        <!-- Info de la película -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="Título de la película" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/text_view_genero"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:text="Género" />
+            <TextView
+                android:id="@+id/text_view_titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Título de la película" />
 
-        <TextView
-            android:id="@+id/text_view_anio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:text="Año" />
+            <TextView
+                android:id="@+id/text_view_genero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:text="Género" />
 
+            <TextView
+                android:id="@+id/text_view_anio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:text="Año" />
+        </LinearLayout>
+
+        <!-- Botón de borrar (papelera) -->
+        <ImageButton
+            android:id="@+id/boton_borrar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_delete_24"
+            android:contentDescription="Eliminar película"
+            android:tint="@android:color/holo_red_dark" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

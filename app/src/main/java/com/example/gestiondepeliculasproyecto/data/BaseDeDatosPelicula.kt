@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.gestiondepeliculasproyecto.modelo.Pelicula
 import com.example.gestiondepeliculasproyecto.modelo.PeliculaDao
 
-@Database(entities = [Pelicula::class], version = 1)
+@Database(entities = [Pelicula::class], version = 2)
 abstract class BaseDeDatosPelicula : RoomDatabase(){
     abstract fun peliculaDao(): PeliculaDao
 
@@ -15,13 +15,15 @@ abstract class BaseDeDatosPelicula : RoomDatabase(){
         @Volatile
         private var INSTANCIA : BaseDeDatosPelicula ?= null
 
-        fun obtenerBaseDeDatos(context: Context): BaseDeDatosPelicula{
-            return INSTANCIA ?: synchronized(this){
+        fun obtenerBaseDeDatos(context: Context): BaseDeDatosPelicula {
+            return INSTANCIA ?: synchronized(this) {
                 val instancia = Room.databaseBuilder(
                     context.applicationContext,
                     BaseDeDatosPelicula::class.java,
                     "base_de_datos_pelicula"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCIA = instancia
                 instancia
             }

@@ -8,5 +8,6 @@ data class Pelicula (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val titulo: String,
     val genero: String,
-    val anio: Int
+    val anio: Int,
+    val imagenUri: String? = null
 )

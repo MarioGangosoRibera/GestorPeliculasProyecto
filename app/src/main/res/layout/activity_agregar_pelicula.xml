@@ -55,10 +55,24 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <ImageView
+        android:id="@+id/image_view_seleccionar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/image_search_24"
+        android:scaleType="centerCrop"
+        android:contentDescription="Seleccionar imagen"
+        android:background="@android:color/darker_gray"
+        android:clickable="true"
+        android:focusable="true" />
+
+
     <Button
         android:id="@+id/boton_guardar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Guardar" />
+
 
 </LinearLayout>

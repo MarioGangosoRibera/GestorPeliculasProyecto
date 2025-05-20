@@ -3,6 +3,7 @@ package com.example.gestiondepeliculasproyecto
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +27,17 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adaptador = AdaptadorPelicula()
+
+        adaptador = AdaptadorPelicula{ peliculaAEliminar ->
+           CoroutineScope(Dispatchers.IO).launch {
+               peliculaDao.eliminar(peliculaAEliminar)
+               val peliculasActualizadas = peliculaDao.obtenerTodasLasPeliculas()
+               runOnUiThread{
+                   adaptador.setPeliculas(peliculasActualizadas)
+                   Toast.makeText(this@MainActivity, "Pelicula eliminada", Toast.LENGTH_SHORT).show()
+               }
+           }
+        }
         recyclerView.adapter = adaptador
 
         // Configurar el botón para agregar películas
