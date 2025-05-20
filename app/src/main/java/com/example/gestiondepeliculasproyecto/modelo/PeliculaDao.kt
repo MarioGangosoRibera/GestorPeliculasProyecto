@@ -10,5 +10,5 @@ interface PeliculaDao {
     suspend fun insertar(pelicula: Pelicula)
 
     @Query("SELECT * FROM peliculas")
-    suspend fun obtenerTodasLasPeliculas():List<Pelicula>
+    suspend fun obtenerTodasLasPeliculas(): List<Pelicula>
 }

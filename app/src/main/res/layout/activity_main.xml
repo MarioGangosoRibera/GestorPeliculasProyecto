@@ -8,7 +8,7 @@
         android:id="@+id/boton_agregar_pelicula"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar Película"/>
+        android:text="Agregar Película" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
