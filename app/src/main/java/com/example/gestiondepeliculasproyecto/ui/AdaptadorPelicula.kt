@@ -10,24 +10,26 @@ import com.example.gestiondepeliculasproyecto.EditarPeliculaActivity
 import com.example.gestiondepeliculasproyecto.R
 import com.example.gestiondepeliculasproyecto.modelo.Pelicula
 
+//Adaptador para el RecyclerView que muestra la lista de peliculas
 class AdaptadorPelicula (
-    private val onBorrarClick: (Pelicula) -> Unit
+    private val onBorrarClick: (Pelicula) -> Unit //Funcion al hacer clic en el boton borrar
 ): RecyclerView.Adapter<AdaptadorPelicula.PeliculaViewHolder>() {
 
-    private var listaPeliculas = emptyList<Pelicula>()
+    private var listaPeliculas = emptyList<Pelicula>() //Lista de peliculas
 
-    // Método para crear la vista del ViewHolder
+    // Crea la vista para cada elemento de la lista
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeliculaViewHolder {
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.item_pelicula, parent, false)
         return PeliculaViewHolder(vista)
     }
-    // Método para vincular los datos a la vista
+    // Asigna los datos de cada pelicula a su vista
     override fun onBindViewHolder(holder: PeliculaViewHolder, position: Int) {
         val peliculaActual = listaPeliculas[position]
         holder.tituloTextView.text = peliculaActual.titulo
         holder.generoTextView.text = peliculaActual.genero
         holder.anioTextView.text = peliculaActual.anio.toString()
 
+        //Al hacer clic en el boton de borrar
         holder.botonBorrar.setOnClickListener {
             onBorrarClick(peliculaActual)
         }
@@ -48,12 +50,12 @@ class AdaptadorPelicula (
     override fun getItemCount(): Int {
         return listaPeliculas.size
     }
-    // Método para actualizar la lista de películas
+    // Actualiza la lista de películas que se va a mostrar
     fun setPeliculas(peliculas: List<Pelicula>) {
         this.listaPeliculas = peliculas
         notifyDataSetChanged() // Notifica al adaptador que los datos han cambiado
     }
-    // Clase interna para el ViewHolder
+    // ViewHolder que representa la vista de cada película
     class PeliculaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tituloTextView: TextView = itemView.findViewById(R.id.text_view_titulo)
         val generoTextView: TextView = itemView.findViewById(R.id.text_view_genero)

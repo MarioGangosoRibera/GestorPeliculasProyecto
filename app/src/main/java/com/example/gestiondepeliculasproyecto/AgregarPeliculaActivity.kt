@@ -16,24 +16,30 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+//Actividad que agrega una pelicula a la base de datos
 class AgregarPeliculaActivity : AppCompatActivity() {
 
+    //Variable para los campos del formulario
     private lateinit var editTextTitulo: TextInputEditText
     private lateinit var editTextGenero: TextInputEditText
     private lateinit var editTextAnio: TextInputEditText
     private lateinit var botonGuardar: Button
     private lateinit var imageViewSeleccionar: ImageView
 
+    //Uri de la imagen seleccionada
     private var imagenUri: Uri? = null
 
+    //Acceso al dao de la base de datos usando lazy para inicializacion
     private val peliculaDao: PeliculaDao by lazy {
         BaseDeDatosPelicula.obtenerBaseDeDatos(application).peliculaDao()
     }
 
+    //Identificar la actividad de selección de imagen
     companion object {
         private const val CODIGO_SELECCION_IMAGEN = 100
     }
 
+    //Método que se ejecuta al iniciar la actividad
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_pelicula)
@@ -59,32 +65,37 @@ class AgregarPeliculaActivity : AppCompatActivity() {
         }
     }
 
+    //Método que se ejecuta cuando se vuelve de una actividad (como el selector de imagen)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        // Verifica que el resultado proviene del selector de imagen y fue exitoso
         if (requestCode == CODIGO_SELECCION_IMAGEN && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
-                imagenUri = uri
+                imagenUri = uri // Guarda el URI de la imagen seleccionada
+                //Solicita permiso persistente para leer la imagen en el futuro
                 contentResolver.takePersistableUriPermission(
                     uri,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION
                 )
+                // Muestra la imagen seleccionada en el ImageView
                 imageViewSeleccionar.setImageURI(uri)
             }
         }
     }
-
+    //Método para validar los campos y guardar la película en la base de datos
     private fun guardarPelicula() {
+        //Obtiene el texto de los campos
         val titulo = editTextTitulo.text.toString().trim()
         val genero = editTextGenero.text.toString().trim()
         val anioStr = editTextAnio.text.toString().trim()
 
-        // Validar entradas
+        //Verifica que todos los campos estén completos
         if (titulo.isEmpty() || genero.isEmpty() || anioStr.isEmpty()) {
             Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
-
+        //Intenta convertir el año a entero, muestra error si no es válido
         val anio = try {
             anioStr.toInt()
         } catch (e: NumberFormatException) {
@@ -103,14 +114,14 @@ class AgregarPeliculaActivity : AppCompatActivity() {
         // Guardar en base de datos
         CoroutineScope(Dispatchers.IO).launch {
             peliculaDao.insertar(nuevaPelicula)
-
+            //Regresa al hilo principal para mostrar un mensaje y cerrar la actividad
             runOnUiThread {
                 Toast.makeText(
                     this@AgregarPeliculaActivity,
                     "Película guardada con éxito",
                     Toast.LENGTH_SHORT
                 ).show()
-                finish()
+                finish() //Cierra esta pantalla y vuelve a la anterior
             }
         }
     }
