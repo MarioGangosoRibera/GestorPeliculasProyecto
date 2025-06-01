@@ -1,9 +1,11 @@
 package com.example.gestiondepeliculasproyecto.ui
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gestiondepeliculasproyecto.EditarPeliculaActivity
@@ -29,6 +31,17 @@ class AdaptadorPelicula (
         holder.generoTextView.text = peliculaActual.genero
         holder.anioTextView.text = peliculaActual.anio.toString()
 
+        val uri = peliculaActual.imagenUri
+        if (!uri.isNullOrEmpty()) {
+            try {
+                holder.imagenPelicula.setImageURI(Uri.parse(uri))
+            } catch (e: Exception) {
+                holder.imagenPelicula.setImageResource(R.drawable.baseline_hide_image_24)
+            }
+        } else {
+            holder.imagenPelicula.setImageResource(R.drawable.baseline_hide_image_24)
+        }
+
         //Al hacer clic en el boton de borrar
         holder.botonBorrar.setOnClickListener {
             onBorrarClick(peliculaActual)
@@ -42,6 +55,7 @@ class AdaptadorPelicula (
                 putExtra("titulo", peliculaActual.titulo)
                 putExtra("genero", peliculaActual.genero)
                 putExtra("anio", peliculaActual.anio)
+                putExtra("imageUri", peliculaActual.imagenUri)
             }
             context.startActivity(intent)
         }
@@ -61,5 +75,6 @@ class AdaptadorPelicula (
         val generoTextView: TextView = itemView.findViewById(R.id.text_view_genero)
         val anioTextView: TextView = itemView.findViewById(R.id.text_view_anio)
         val botonBorrar: ImageButton = itemView.findViewById(R.id.boton_borrar)
+        val imagenPelicula: ImageView = itemView.findViewById(R.id.image_view_pelicula)
     }
 }
